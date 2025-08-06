@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add the model directory to path
+model_path = "/workspace/weights/DotsOCR"
+sys.path.insert(0, model_path)
+
 def register_dots_ocr():
     from vllm.model_executor.models import ModelRegistry
 
