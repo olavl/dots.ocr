@@ -1,30 +1,27 @@
-import sys
-import os
-
-# Add the model directory to path
-model_path = "/workspace/weights/DotsOCR"
-sys.path.insert(0, model_path)
-
-# Import after vLLM is fully initialized
 def register_dots_ocr():
     from vllm.model_executor.models import ModelRegistry
 
-    # Change to the model directory to handle relative imports
-    original_dir = os.getcwd()
-    os.chdir(model_path)
+    # Fix relative imports in the modeling file
+    modeling_file = os.path.join(model_path, "modeling_dots_ocr_vllm.py")
+    with open(modeling_file, 'r') as f:
+        content = f.read()
 
-    try:
-        # Import the model class directly
-        import modeling_dots_ocr_vllm
-        DotsOCRForCausalLM = modeling_dots_ocr_vllm.DotsOCRForCausalLM
+    # Replace relative imports with absolute imports
+    content = content.replace('from .configuration_dots import', 'from configuration_dots import')
 
-        # Register the model
-        ModelRegistry.register_model("DotsOCRForCausalLM", DotsOCRForCausalLM)
-    finally:
-        os.chdir(original_dir)
+    # Write the fixed content to a temporary file
+    fixed_file = os.path.join(model_path, "modeling_dots_ocr_vllm_fixed.py")
+    with open(fixed_file, 'w') as f:
+        f.write(content)
+
+    # Import the fixed module
+    import modeling_dots_ocr_vllm_fixed
+    DotsOCRForCausalLM = modeling_dots_ocr_vllm_fixed.DotsOCRForCausalLM
+
+    # Register the model
+    ModelRegistry.register_model("DotsOCRForCausalLM", DotsOCRForCausalLM)
 
 if __name__ == "__main__":
-    import sys
     register_dots_ocr()
 
     # Now start vLLM with the model registered
