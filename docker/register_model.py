@@ -13,8 +13,10 @@ def register_dots_ocr():
     with open(modeling_file, 'r') as f:
         content = f.read()
 
-    # Replace relative imports with absolute imports
+    # Replace ALL relative imports with absolute imports
     content = content.replace('from .configuration_dots import', 'from configuration_dots import')
+    content = content.replace('from .modeling_dots_vision import', 'from modeling_dots_vision import')
+    content = content.replace('from .', 'from ')  # Catch any other relative imports
 
     # Write the fixed content to a temporary file
     fixed_file = os.path.join(model_path, "modeling_dots_ocr_vllm_fixed.py")
