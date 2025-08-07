@@ -1131,6 +1131,10 @@ print(output_text)
 
 </details>
 
+### Hugginface inference with CPU
+Please refer to [CPU inference](https://github.com/rednote-hilab/dots.ocr/issues/1#issuecomment-3148962536)
+
+
 ## 3. Document Parse
 **Based on vLLM server**, you can parse an image or a pdf file using the following commands:
 ```bash
